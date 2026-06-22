@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VLSI Smart Home FPGA Dashboard</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">VLSI Course Project</p>
+          <h1>Smart Home Automation Controller on FPGA</h1>
+          <p class="subtitle">
+            Virtual FPGA controller simulator with PIR/LDR/temperature/door inputs,
+            manual override, safety alarm, energy saving, logs, reports, and Verilog source access.
+          </p>
+        </div>
+        <div class="status-panel">
+          <span id="connectionBadge" class="badge danger">Backend not checked</span>
+          <label for="backendUrl">Backend URL</label>
+          <div class="url-row">
+            <input id="backendUrl" value="http://127.0.0.1:8000" />
+            <button id="saveUrlBtn" type="button">Save</button>
+            <button id="testBtn" type="button">Test</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="metrics">
+        <article>
+          <span>FSM State</span>
+          <strong id="stateValue">--</strong>
+        </article>
+        <article>
+          <span>Light PWM</span>
+          <strong id="lightValue">--</strong>
+        </article>
+        <article>
+          <span>Fan PWM</span>
+          <strong id="fanValue">--</strong>
+        </article>
+        <article>
+          <span>Alarm</span>
+          <strong id="alarmValue">--</strong>
+        </article>
+      </section>
+
+      <section class="grid">
+        <form id="controllerForm" class="panel">
+          <div class="panel-head">
+            <h2>FPGA Controller Inputs</h2>
+            <button id="evaluateBtn" type="submit">Evaluate</button>
+          </div>
+
+          <div class="form-grid">
+            <label>
+              Temperature
+              <input id="temperature" type="number" min="0" max="100" value="34" />
+            </label>
+            <label>
+              Temperature Threshold
+              <input id="tempThreshold" type="number" min="0" max="100" value="30" />
+            </label>
+          </div>
+
+          <div class="switch-grid">
+            <label><input id="motion" type="checkbox" checked /> Motion detected (PIR)</label>
+            <label><input id="dark" type="checkbox" checked /> Room is dark (LDR)</label>
+            <label><input id="doorOpen" type="checkbox" /> Door open</label>
+            <label><input id="securityMode" type="checkbox" /> Security mode</label>
+            <label><input id="overcurrent" type="checkbox" /> Over-current fault</label>
+            <label><input id="noMotionTimeout" type="checkbox" /> No-motion timeout</label>
+          </div>
+
+          <div class="subhead">Manual Override</div>
+          <div class="switch-grid">
+            <label><input id="manualOverride" type="checkbox" /> Enable manual override</label>
+            <label><input id="manualLight" type="checkbox" /> Manual light ON</label>
+            <label><input id="manualFan" type="checkbox" /> Manual fan ON</label>
+            <label><input id="manualSocket" type="checkbox" /> Manual socket relay ON</label>
+          </div>
+
+          <div id="resultBox" class="result-box">
+            Select inputs and click Evaluate.
+          </div>
+        </form>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Output Signals</h2>
+            <button id="refreshLogsBtn" type="button">Refresh Logs</button>
+          </div>
+
+          <div class="flags">
+            <span id="socketFlag">Socket Relay: --</span>
+            <span id="acFlag">AC Relay: --</span>
+            <span id="energyFlag">Energy Saving: --</span>
+            <span id="modeFlag">Mode: --</span>
+          </div>
+
+          <div class="actions">
+            <button id="simulateBtn" type="button">Generate Simulation</button>
+            <button id="csvBtn" type="button">CSV</button>
+            <button id="pdfBtn" type="button">PDF</button>
+            <button id="rtlBtn" type="button">RTL</button>
+            <button id="tbBtn" type="button">Testbench</button>
+            <button id="clearBtn" type="button" class="danger-btn">Clear Logs</button>
+          </div>
+
+          <div class="truth-table">
+            <h3>Priority Logic</h3>
+            <ol>
+              <li>Over-current alarm</li>
+              <li>Security alarm</li>
+              <li>Manual override</li>
+              <li>Sensor automation</li>
+              <li>Energy saving timeout</li>
+            </ol>
+          </div>
+        </section>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Recent Automation Logs</h2>
+          <span id="logCount" class="muted">0 records</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>State</th>
+                <th>Temp</th>
+                <th>Light</th>
+                <th>Fan</th>
+                <th>Socket</th>
+                <th>Alarm</th>
+              </tr>
+            </thead>
+            <tbody id="logsBody">
+              <tr><td colspan="7">No logs yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>
